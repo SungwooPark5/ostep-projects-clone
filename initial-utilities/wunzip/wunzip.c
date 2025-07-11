@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[]){
+
+  int num;
+  int ch;
+
+  if(argc<2){
+    printf("wunzip: file1 [file2 ...]\n");
+    exit(1);
+  }
+  
+  for(int j=1; j<argc; j++){
+    FILE *fp = fopen(argv[j], "rb");
+    if(fp==NULL){
+      printf("wunzip: file1 [file2 ...]\n");
+      exit(1);
+    }
+  
+    while(fread(&num, sizeof(int),1,fp)==1){
+
+      fread(&ch, sizeof(char),1,fp);
+
+      for (int i=0; i<num; i++){
+	putchar(ch);
+      }
+    }
+    fclose(fp);
+  }
+  return 0;
+}
