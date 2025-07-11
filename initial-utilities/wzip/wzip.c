@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define BUFFER_SIZE (1024)
+
+int main(int argc, char *argv[]){
+
+  int ch1;
+  int ch2;
+  int count=1;
+  
+    // argv[0] -> wzip
+
+    // printf("file name: %s", argv[0]);
+
+  if(argc<2){
+    printf("wzip: file1 [file2 ...]\n");
+    exit(1);
+  }
+  
+    for(int i=1; i<argc;i++){
+      FILE *fp = fopen(argv[i], "r");
+      if (fp == NULL) {
+        printf("wzip: file1 [file2 ...]\n");
+	exit(1);
+      }
+
+      if(i==1){
+	ch1=fgetc(fp);
+      }
+      
+      while(ch2!=EOF){
+	ch2=fgetc(fp);
+	if(ch1==ch2){
+	  count++;
+	}else if(ch2==EOF&&i==(argc-1)){
+	  fwrite(&count, sizeof(int), 1, stdout);
+	  fwrite(&ch1, sizeof(char), 1, stdout);
+	}else if(ch2!=EOF){
+	  fwrite(&count, sizeof(int), 1, stdout);
+	  fwrite(&ch1, sizeof(char), 1, stdout);
+	  count=1;
+	  ch1=ch2;
+	}
+      }
+      ch2=ch1;
+      fclose(fp);
+    }
+    
+    return 0;
+}
